@@ -1,0 +1,19 @@
+{
+  "name": "resume-master-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx tsc",
+    "start": "nodemon src/server.ts"
+  },
+  "author": "Sanaullah Ansari",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "nodemon": "^3.1.4",
+    "ts-node": "^10.9.2"
+  }
+}
