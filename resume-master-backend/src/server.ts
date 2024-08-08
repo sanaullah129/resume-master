@@ -1,6 +1,7 @@
 import express, { Express } from 'express'
 import dotenv from "dotenv";
 import connectDb from './db';
+import loginRoutes from './routes/LoginRoutes';
 
 
 dotenv.config();
@@ -19,6 +20,8 @@ else {
 app.get("/", (req, res) => {
     res.send("Your backend server for Resume Master is running");
 });
+
+app.use("/api/user", loginRoutes);
 
 app.listen(port, () => {
     console.log(`[server]: Server is running at http://localhost:${port}`)
