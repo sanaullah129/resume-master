@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npx tsc",
     "start": "nodemon src/index.ts",
-    "postinstall": "primsa generate"
+    "postinstall": "prisma generate"
   },
   "author": "Sanaullah Ansari",
   "license": "ISC",
