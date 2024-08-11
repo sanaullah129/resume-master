@@ -5,9 +5,10 @@
   "main": "src/index.ts",
   "scripts": {
     "build": "npx tsc",
-    "start": "nodemon src/index.ts"
+    "start": "nodemon src/index.ts",
+    "postinstall": "primsa generate"
   },
-  "author": "SAYAM",
+  "author": "Sanaullah Ansari",
   "license": "ISC",
   "devDependencies": {
     "@types/cors": "^2.8.17",
