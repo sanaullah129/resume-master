@@ -25,6 +25,9 @@ const SignUp = () => {
       toast.dismiss();
       return toast.error("Passwords doesn't match");
     }
+
+    
+
     console.log(values);
     toast.dismiss();
     return toast.success("Completed");
