@@ -1,17 +1,40 @@
 "use client";
 import { Button, Form, FormProps, Input } from "antd";
-import React from "react";
+import React, { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { Login as LoginInterface } from "../utils/Interfaces";
 
-
 const Login: React.FC = () => {
   const router = useRouter();
 
-  const onFinish: FormProps<LoginInterface>["onFinish"] = (values) => {
+  useEffect(() => {
+    const token = localStorage.getItem("auth-token");
+    if (!token) {
+      localStorage.clear();
+    } else {
+      router.push("/");
+    }
+  }, []);
+
+  const onFinish: FormProps<LoginInterface>["onFinish"] = async (values) => {
     const { username, password } = values;
-    console.log(values);
+    toast.loading("Processing...");
+    const logIn = await fetch((process.env.NEXT_PUBLIC_API_LINK as string) + "user/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: username, password: password }),
+      }
+    );
+    const response = await logIn.json();
+    if (response.token) {
+      toast.success("Logged in Successfully");
+      localStorage.setItem("auth-token", ("Bearer " + response.token) as string);
+      router.push("/");
+    } else {
+      toast.error("Internal Server Error");
+    }
+    toast.dismiss();
   };
 
   return (
@@ -22,7 +45,12 @@ const Login: React.FC = () => {
           <Form.Item
             label="Username"
             name="username"
-            rules={[{ required: true, message: "Please enter your Username or EmailId" }]}
+            rules={[
+              {
+                required: true,
+                message: "Please enter your Username or EmailId",
+              },
+            ]}
           >
             <Input placeholder="Enter your Username or Email Id" />
           </Form.Item>
@@ -40,7 +68,7 @@ const Login: React.FC = () => {
           </Form.Item>
         </Form>
         <div className="text-center mt-2">
-          <p>
+          <p className="text-black">
             Don't have an account?{" "}
             <Button type="default" onClick={() => router.push("/sign-up")}>
               Sign up

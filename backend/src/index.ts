@@ -16,7 +16,6 @@ if (MONGO_URL) {
 }
 else {
     console.log("Mongo Url not found");
-    throw new Error("Database URL not found")
 }
 
 app.use(bodyParser.json());

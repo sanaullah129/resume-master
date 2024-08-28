@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
+import Navbar from '../../src/app/components/Navbar';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,6 +23,7 @@ export default function RootLayout({
           position="bottom-center"
           toastOptions={{ style: { background: "#374155", color: "#fff" } }}
         />
+        <Navbar />
         {children}
       </body>
     </html>

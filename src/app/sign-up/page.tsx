@@ -12,9 +12,8 @@ interface SubmitProps extends FormSubmit {
 const SignUp: React.FC = () => {
   const router = useRouter();
 
-  const onFinish: FormProps<SubmitProps>["onFinish"] = (values) => {
+  const onFinish: FormProps<SubmitProps>["onFinish"] = async (values) => {
     const { emailId, username, password, confirmPassword } = values;
-
     toast.loading("Processing");
 
     if (password !== confirmPassword) {
@@ -22,9 +21,26 @@ const SignUp: React.FC = () => {
       return toast.error("Passwords don't match");
     }
 
-    console.log(values);
-    toast.dismiss();
-    toast.success("Completed");
+    const signUp = await fetch(
+      (process.env.NEXT_PUBLIC_API_LINK as string) + "user/sign-up",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: username, emailId: emailId, password: password }),
+      }
+    );
+
+    const response = await signUp.json();
+    if(response.statusId == 1){
+      toast.dismiss();
+      toast.success("User Registered Successfully");
+      router.push("/login");
+    }
+    else{
+      console.log(response);
+      toast.dismiss();
+      toast.error("Internal Server Error");
+    }
   };
 
   return (
@@ -73,7 +89,7 @@ const SignUp: React.FC = () => {
           </Form.Item>
         </Form>
         <div className="text-center mt-2">
-          <p>
+          <p className="text-black">
             Already have an account?{" "}
             <Button type="default" onClick={() => router.push("/login")}>
               Log In
