@@ -1,0 +1,9 @@
+Resume Schema:
+Resume Title -- Initial Save
+1st Step -- Name, Phone Number, Email Id, Position, District, City, Pin Code, Social Media(opt), Linkedin(opt), Github(opt), Portfolio(opt)
+2nd Step -- Description (Ai Generated) -- Restrict Length
+3rd Step -- Skills --> Technical Skills, Other Skills 
+4th Step --  Experience (Array) --> Company Name, From Date, To Date, Location Description(bullet points), Skills 
+5th Step -- Projects (Array) --> Project Title, Description(bullet points), Skills
+6th Step -- Education (Array) --> School/University Name, From Date, To Date, Grade/CGPA, Degree, Location
+7th Step -- Addition Info (Array) --> Title(any info like hobbies, language, etc), Info(information according to the title)

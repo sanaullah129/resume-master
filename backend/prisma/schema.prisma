@@ -7,12 +7,13 @@ datasource db {
   url      = env("MONGO_URL")
 }
 
-model UserDetials {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  username  String   @unique
-  emailId   String   @unique
+model UserDetails {
+  id        String          @id @default(auto()) @map("_id") @db.ObjectId
+  username  String          @unique
+  emailId   String          @unique
   password  String
-  createdAt DateTime @default(now())
+  createdAt DateTime        @default(now())
+  resumes   ResumeDetails[]
 }
 
 model ErrorLog {
@@ -20,4 +21,82 @@ model ErrorLog {
   routeDetails String
   error        String
   errorDate    DateTime @default(now())
+}
+
+model ResumeDetails {
+  id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String           @db.ObjectId
+  resumeTitle    String?
+  name           String?
+  phoneNumber    Int?
+  emailId        String?
+  position       String?
+  district       String?
+  city           String?
+  pincode        String?
+  linkedIn       String?
+  github         String?
+  website        String?
+  socialMedia    String?
+  description    String?
+  skills         Skills[]
+  experience     Experience[]
+  projects       Projects[]
+  education      Education[]
+  additionalInfo AdditionalInfo[]
+  user           UserDetails      @relation(fields: [userId], references: [id])
+}
+
+model Skills {
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  resumeDetailsId String        @db.ObjectId
+  userId          String
+  technicalSkills String
+  otherSkills     String
+  resumeDetails   ResumeDetails @relation(fields: [resumeDetailsId], references: [id])
+}
+
+model Experience {
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  resumeDetailsId String        @db.ObjectId
+  userId          String
+  companyName     String
+  fromDate        String
+  toDate          String
+  location        String
+  description     String
+  skills          String
+  resumeDetails   ResumeDetails @relation(fields: [resumeDetailsId], references: [id])
+}
+
+model Projects {
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  resumeDetailsId String        @db.ObjectId
+  userId          String
+  projectTitle    String
+  description     String
+  skills          String
+  resumeDetails   ResumeDetails @relation(fields: [resumeDetailsId], references: [id])
+}
+
+model Education {
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  resumeDetailsId String        @db.ObjectId
+  userId          String
+  schoolName      String
+  fromDate        String
+  toDate          String
+  grade           String
+  specialization  String
+  location        String
+  ResumeDetails   ResumeDetails @relation(fields: [resumeDetailsId], references: [id])
+}
+
+model AdditionalInfo {
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  resumeDetailsId String        @db.ObjectId
+  userId          String
+  title           String
+  info            String
+  resumeDetails   ResumeDetails @relation(fields: [resumeDetailsId], references: [id])
 }
