@@ -3,6 +3,8 @@ import { createUser, generateToken, isUserAvailableCheck } from "../services/Use
 import bcrypt from 'bcrypt';
 import { errorLogService } from "../services/CommonService";
 
+// POST
+// Route: "/api/user/sign-up"
 export const registerUser = async (req: Request, res: Response) => {
     try {
         const { username, emailId, password } = req.body;
@@ -33,6 +35,8 @@ export const registerUser = async (req: Request, res: Response) => {
     }
 }
 
+// POST
+// Route: "/api/user/login"
 export const loginUser = async (req: Request, res: Response) => {
     try {
         const { username, password } = req.body;

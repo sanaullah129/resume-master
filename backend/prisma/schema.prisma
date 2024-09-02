@@ -33,7 +33,7 @@ model ResumeDetails {
   position       String?
   district       String?
   city           String?
-  pincode        String?
+  pincode        Int?
   linkedIn       String?
   github         String?
   website        String?

@@ -4,6 +4,7 @@ import connectDb from "./db";
 import bodyParser from "body-parser";
 import cors from 'cors';
 import userRoutes from "./routes/UserRoutes";
+import resumeRoutes from "./routes/ResumeRoutes";
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/user", userRoutes);
+app.use("/api/resume", resumeRoutes);
 
 app.listen(port, () => {
     console.log(`[server]: Server is running at http://localhost:${port}`);
