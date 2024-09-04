@@ -43,3 +43,9 @@ export const generateToken = async (jwtSecret: string, username: string, passwor
     }
     return token;
 }
+
+export const getUserById = async (id: string) => {
+    return await prisma.userDetails.findUnique({
+        where: { id: id }
+    })
+}
