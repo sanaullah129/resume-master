@@ -14,14 +14,15 @@ export const saveTitle = async (req: Request, res: Response) => {
       return res.status(400).json({ statusId: 2, status: "Please fill all the details" });
     }
 
-    var resume;
     const isUserAvaiable = await getUserById(userId);
 
-    if (isUserAvaiable) {
-      resume = await saveTitleService(userId, resumeTitle);
-    } else {
+    if (!isUserAvaiable) {
       return res.send(404).json({ statusId: 3, status: "User not found" });
+
     }
+
+    const resume = await saveTitleService(userId, resumeTitle);
+
 
     if (resume) {
       return res.status(200).json({ resumeDetails: resume });
@@ -46,15 +47,19 @@ export const savePersonalInfo = async (req: Request, res: Response) => {
       return res.status(400).json({ statusId: 2, status: "Please fill all the required details" });
     }
 
-    var savedInfo;
     const isUserAvaiable = await getUserById(userId);
     const isResumeAvailable = await getResumeById(resumeId);
 
-    if (isUserAvaiable && isResumeAvailable) {
-      savedInfo = await savePersonalInfoService(resumeId, name, phoneNumber, emailId, position, district, city, pinCode, socialMedia, linkedIn, gitHub, portfolio);
-    } else {
-      return res.send(404).json({ statusId: 3, status: "User or Resume not found" });
+    if (!isUserAvaiable) {
+      return res.send(404).json({ statusId: 3, status: "User not found" });
+
     }
+
+    if (!isResumeAvailable) {
+      return res.send(404).json({ statusId: 3, status: "Resume not found" });
+    }
+    const savedInfo = await savePersonalInfoService(resumeId, name, phoneNumber, emailId, position, district, city, pinCode, socialMedia, linkedIn, gitHub, portfolio);
+
 
     if (savedInfo) {
       return res.status(200).json({ resumeDetails: savedInfo });
@@ -80,15 +85,21 @@ export const resumeDescription = async (req: Request, res: Response) => {
       return res.status(400).json({ statusId: 2, status: "Please fill all the details" });
     }
 
-    var saveDescription;
     const isUserAvaiable = await getUserById(userId);
     const isResumeAvailable = await getResumeById(resumeId);
 
-    if (isUserAvaiable && isResumeAvailable) {
-      saveDescription = await saveResumeDescription(resumeId, resumeDescription);
-    } else {
+    if (!isUserAvaiable) {
       return res.send(404).json({ statusId: 3, status: "User not found" });
+
     }
+
+    if (!isResumeAvailable) {
+      return res.send(404).json({ statusId: 3, status: "Resume not found" });
+    }
+
+
+    const saveDescription = await saveResumeDescription(resumeId, resumeDescription);
+
 
     if (saveDescription) {
       return res.status(200).json({ resumeDetails: saveDescription });
@@ -115,15 +126,20 @@ export const saveSkills = async (req: Request, res: Response) => {
       return res.status(400).json({ statusId: 2, status: "Please fill all the details" });
     }
 
-    var addSkills;
     const isUserAvaiable = await getUserById(userId);
     const isResumeAvailable = await getResumeById(resumeId);
 
-    if (isUserAvaiable && isResumeAvailable) {
-      addSkills = await saveSkill(resumeId, userId, technicalSkills, otherSkills);
-    } else {
+    if (!isUserAvaiable) {
       return res.send(404).json({ statusId: 3, status: "User not found" });
+
     }
+
+    if (!isResumeAvailable) {
+      return res.send(404).json({ statusId: 3, status: "Resume not found" });
+    }
+
+
+    const addSkills = await saveSkill(resumeId, userId, technicalSkills, otherSkills);
 
     if (addSkills) {
       return res.status(200).json({ resumeDetails: addSkills });
@@ -148,11 +164,16 @@ export const addExperience = async (req: Request, res: Response) => {
       return res.status(400).json({ statusId: 2, status: "Please fill all the details" });
     }
 
-    const isUserAvailable = await getUserById(userId);
+    const isUserAvaiable = await getUserById(userId);
     const isResumeAvailable = await getResumeById(resumeId);
 
-    if (!isUserAvailable || !isResumeAvailable) {
-      return res.status(404).json({ statusId: 3, status: "User or Resume not found" });
+    if (!isUserAvaiable) {
+      return res.send(404).json({ statusId: 3, status: "User not found" });
+
+    }
+
+    if (!isResumeAvailable) {
+      return res.send(404).json({ statusId: 3, status: "Resume not found" });
     }
 
     const savedExperiences = await Promise.all(experiences.map(exp => saveExperiences(resumeId, userId, exp.companyName, exp.fromDate, exp.toDate, exp.location, exp.description, exp.skills)));
@@ -175,11 +196,16 @@ export const addProjects = async (req: Request, res: Response) => {
       return res.status(400).json({ statusId: 2, status: "Please fill all the details" });
     }
 
-    const isUserAvailable = await getUserById(userId);
+    const isUserAvaiable = await getUserById(userId);
     const isResumeAvailable = await getResumeById(resumeId);
 
-    if (!isUserAvailable || !isResumeAvailable) {
-      return res.status(404).json({ statusId: 3, status: "User or Resume not found" });
+    if (!isUserAvaiable) {
+      return res.send(404).json({ statusId: 3, status: "User not found" });
+
+    }
+
+    if (!isResumeAvailable) {
+      return res.send(404).json({ statusId: 3, status: "Resume not found" });
     }
 
     const savedProjects = await Promise.all(projects.map(project => saveProjects(resumeId, userId, project.projectTitle, project.description, project.skills)));
@@ -203,11 +229,16 @@ export const addEducation = async (req: Request, res: Response) => {
       return res.status(400).json({ statusId: 2, status: "Please fill all the details" });
     }
 
-    const isUserAvailable = await getUserById(userId);
+    const isUserAvaiable = await getUserById(userId);
     const isResumeAvailable = await getResumeById(resumeId);
 
-    if (!isUserAvailable || !isResumeAvailable) {
-      return res.status(404).json({ statusId: 3, status: "User or Resume not found" });
+    if (!isUserAvaiable) {
+      return res.send(404).json({ statusId: 3, status: "User not found" });
+
+    }
+
+    if (!isResumeAvailable) {
+      return res.send(404).json({ statusId: 3, status: "Resume not found" });
     }
 
     const savedEducation = await Promise.all(education.map(edu => saveEducation(resumeId, userId, edu.schoolName, edu.fromDate, edu.toDate, edu.grade, edu.specialization, edu.location)));
@@ -231,11 +262,16 @@ export const addAdditionalInfo = async (req: Request, res: Response) => {
       return res.status(400).json({ statusId: 2, status: "Please fill all the details" });
     }
 
-    const isUserAvailable = await getUserById(userId);
+    const isUserAvaiable = await getUserById(userId);
     const isResumeAvailable = await getResumeById(resumeId);
 
-    if (!isUserAvailable || !isResumeAvailable) {
-      return res.status(404).json({ statusId: 3, status: "User or Resume not found" });
+    if (!isUserAvaiable) {
+      return res.send(404).json({ statusId: 3, status: "User not found" });
+
+    }
+
+    if (!isResumeAvailable) {
+      return res.send(404).json({ statusId: 3, status: "Resume not found" });
     }
 
     const savedAdditionalInfo = await Promise.all(additionalInfo.map(addInfo => saveAdditionalInfoService(resumeId, userId, addInfo.title, addInfo.info)));
