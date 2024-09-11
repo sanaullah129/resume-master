@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { errorLogService } from "../services/CommonService";
-import { getResumeById, saveEducation, saveExperiences, savePersonalInfoService, saveProjects, saveResumeDescription, saveSkill, saveTitleService, saveAdditionalInfo as saveAdditionalInfoService } from "../services/ResumeService";
-import { getUserById } from "../services/UserService";
+import { errorLogService } from "../services/commonService";
+import { getResumeById, saveEducation, saveExperiences, savePersonalInfoService, saveProjects, saveResumeDescription, saveSkill, saveTitleService, saveAdditionalInfo as saveAdditionalInfoService } from "../services/resumeService";
+import { getUserById } from "../services/userService";
 
 // POST
 // Route: "/api/resume/saveTitle"
@@ -21,7 +21,7 @@ export const saveTitle = async (req: Request, res: Response) => {
 
     }
 
-    const resume = await saveTitleService(userId, resumeTitle);
+    const resume = await saveTitleService(userId, resumeTitle, '');
 
 
     if (resume) {
@@ -41,9 +41,9 @@ export const saveTitle = async (req: Request, res: Response) => {
 export const savePersonalInfo = async (req: Request, res: Response) => {
   try {
 
-    const { userId, name, phoneNumber, emailId, position, district, city, pinCode, socialMedia, linkedIn, gitHub, portfolio } = req.body;
+    const { userId, name, phoneNumber, emailId, position, district, city, pinCode, linkedIn, gitHub, website, socialMedia } = req.body;
     const { resumeId } = req.params;
-    if (!resumeId || !userId || !name || !phoneNumber || !emailId || !position || !district || !city || !pinCode) {
+    if (!resumeId || !userId || !name || !phoneNumber || !emailId || !position || !district || !city || !pinCode || !website) {
       return res.status(400).json({ statusId: 2, status: "Please fill all the required details" });
     }
 
@@ -58,7 +58,7 @@ export const savePersonalInfo = async (req: Request, res: Response) => {
     if (!isResumeAvailable) {
       return res.send(404).json({ statusId: 3, status: "Resume not found" });
     }
-    const savedInfo = await savePersonalInfoService(resumeId, name, phoneNumber, emailId, position, district, city, pinCode, socialMedia, linkedIn, gitHub, portfolio);
+    const savedInfo = await savePersonalInfoService(resumeId, userId, name, phoneNumber, emailId, position, district, city, pinCode, linkedIn, gitHub, website, socialMedia);
 
 
     if (savedInfo) {

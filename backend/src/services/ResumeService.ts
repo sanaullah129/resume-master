@@ -8,13 +8,22 @@ export const getResumeById = async (id: string) => {
   })
 }
 
-export const saveTitleService = async (userId: string, resumeTitle: string) => {
-  return await prisma.resumeDetails.create({
-    data: { userId, resumeTitle },
-  });
+export const saveTitleService = async (userId: string, resumeTitle: string, resumeId: string) => {
+  if(resumeId){
+    return await prisma.resumeDetails.update({
+      where: { id: resumeId },
+      data: { userId, resumeTitle },
+    });
+  }
+  else {
+    return await prisma.resumeDetails.create({
+      data: { userId, resumeTitle },
+    });
+  }
+  
 };
 
-export const savePersonalInfoService = async (resumeId: string, name: string, phoneNumber: number, emailId: string, position: string, district: string, city: string, pincode: number, socialMedia: string, linkedIn: string, github: string, website: string) => {
+export const savePersonalInfoService = async (resumeId: string, userId: string, name: string, phoneNumber: number, emailId: string, position: string, district: string, city: string, pincode: number, linkedIn: string, github: string, website: string, socialMedia: string) => {
   return await prisma.resumeDetails.update({
     where: { id: resumeId },
     data: {
