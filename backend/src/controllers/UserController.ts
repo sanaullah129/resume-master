@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { createUser, generateToken, isUserAvailableCheck } from "../services/userService";
+import { createUser, generateToken, isUserAvailableCheck } from "../services/UserService";
 import bcrypt from 'bcrypt';
-import { errorLogService } from "../services/commonService";
+import { errorLogService } from "../services/CommonService";
 
 // POST
 // Route: "/api/user/sign-up"

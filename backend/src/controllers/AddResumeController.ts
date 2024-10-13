@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import { errorLogService } from "../services/commonService";
-import { getResumeById, saveEducation, saveExperiences, savePersonalInfoService, saveProjects, saveResumeDescription, saveSkill, saveTitleService, saveAdditionalInfo as saveAdditionalInfoService } from "../services/resumeService";
-import { getUserById } from "../services/userService";
+import { errorLogService } from "../services/CommonService";
+import { getResumeById, saveEducation, saveExperiences, savePersonalInfoService, saveProjects, saveResumeDescription, saveSkill, saveTitleService, saveAdditionalInfo as saveAdditionalInfoService } from "../services/ResumeService";
+import { getUserById } from "../services/UserService";
+import { preSaveValidation } from "../middlewares/utils";
 
 // POST
 // Route: "/api/resume/saveTitle"
@@ -22,7 +23,6 @@ export const saveTitle = async (req: Request, res: Response) => {
     }
 
     const resume = await saveTitleService(userId, resumeTitle, '');
-
 
     if (resume) {
       return res.status(200).json({ resumeDetails: resume });
@@ -47,17 +47,8 @@ export const savePersonalInfo = async (req: Request, res: Response) => {
       return res.status(400).json({ statusId: 2, status: "Please fill all the required details" });
     }
 
-    const isUserAvaiable = await getUserById(userId);
-    const isResumeAvailable = await getResumeById(resumeId);
-
-    if (!isUserAvaiable) {
-      return res.send(404).json({ statusId: 3, status: "User not found" });
-
-    }
-
-    if (!isResumeAvailable) {
-      return res.send(404).json({ statusId: 3, status: "Resume not found" });
-    }
+    preSaveValidation(res, userId, resumeId);
+    
     const savedInfo = await savePersonalInfoService(resumeId, userId, name, phoneNumber, emailId, position, district, city, pinCode, linkedIn, gitHub, website, socialMedia);
 
 
@@ -85,18 +76,7 @@ export const resumeDescription = async (req: Request, res: Response) => {
       return res.status(400).json({ statusId: 2, status: "Please fill all the details" });
     }
 
-    const isUserAvaiable = await getUserById(userId);
-    const isResumeAvailable = await getResumeById(resumeId);
-
-    if (!isUserAvaiable) {
-      return res.send(404).json({ statusId: 3, status: "User not found" });
-
-    }
-
-    if (!isResumeAvailable) {
-      return res.send(404).json({ statusId: 3, status: "Resume not found" });
-    }
-
+    preSaveValidation(res, userId, resumeId);
 
     const saveDescription = await saveResumeDescription(resumeId, resumeDescription);
 
@@ -126,18 +106,7 @@ export const saveSkills = async (req: Request, res: Response) => {
       return res.status(400).json({ statusId: 2, status: "Please fill all the details" });
     }
 
-    const isUserAvaiable = await getUserById(userId);
-    const isResumeAvailable = await getResumeById(resumeId);
-
-    if (!isUserAvaiable) {
-      return res.send(404).json({ statusId: 3, status: "User not found" });
-
-    }
-
-    if (!isResumeAvailable) {
-      return res.send(404).json({ statusId: 3, status: "Resume not found" });
-    }
-
+    preSaveValidation(res, userId, resumeId);
 
     const addSkills = await saveSkill(resumeId, userId, technicalSkills, otherSkills);
 
@@ -164,17 +133,7 @@ export const addExperience = async (req: Request, res: Response) => {
       return res.status(400).json({ statusId: 2, status: "Please fill all the details" });
     }
 
-    const isUserAvaiable = await getUserById(userId);
-    const isResumeAvailable = await getResumeById(resumeId);
-
-    if (!isUserAvaiable) {
-      return res.send(404).json({ statusId: 3, status: "User not found" });
-
-    }
-
-    if (!isResumeAvailable) {
-      return res.send(404).json({ statusId: 3, status: "Resume not found" });
-    }
+    preSaveValidation(res, userId, resumeId);
 
     const savedExperiences = await Promise.all(experiences.map(exp => saveExperiences(resumeId, userId, exp.companyName, exp.fromDate, exp.toDate, exp.location, exp.description, exp.skills)));
 
@@ -196,17 +155,7 @@ export const addProjects = async (req: Request, res: Response) => {
       return res.status(400).json({ statusId: 2, status: "Please fill all the details" });
     }
 
-    const isUserAvaiable = await getUserById(userId);
-    const isResumeAvailable = await getResumeById(resumeId);
-
-    if (!isUserAvaiable) {
-      return res.send(404).json({ statusId: 3, status: "User not found" });
-
-    }
-
-    if (!isResumeAvailable) {
-      return res.send(404).json({ statusId: 3, status: "Resume not found" });
-    }
+    preSaveValidation(res, userId, resumeId);
 
     const savedProjects = await Promise.all(projects.map(project => saveProjects(resumeId, userId, project.projectTitle, project.description, project.skills)));
 
@@ -229,17 +178,7 @@ export const addEducation = async (req: Request, res: Response) => {
       return res.status(400).json({ statusId: 2, status: "Please fill all the details" });
     }
 
-    const isUserAvaiable = await getUserById(userId);
-    const isResumeAvailable = await getResumeById(resumeId);
-
-    if (!isUserAvaiable) {
-      return res.send(404).json({ statusId: 3, status: "User not found" });
-
-    }
-
-    if (!isResumeAvailable) {
-      return res.send(404).json({ statusId: 3, status: "Resume not found" });
-    }
+    preSaveValidation(res, userId, resumeId);
 
     const savedEducation = await Promise.all(education.map(edu => saveEducation(resumeId, userId, edu.schoolName, edu.fromDate, edu.toDate, edu.grade, edu.specialization, edu.location)));
 
@@ -262,17 +201,7 @@ export const addAdditionalInfo = async (req: Request, res: Response) => {
       return res.status(400).json({ statusId: 2, status: "Please fill all the details" });
     }
 
-    const isUserAvaiable = await getUserById(userId);
-    const isResumeAvailable = await getResumeById(resumeId);
-
-    if (!isUserAvaiable) {
-      return res.send(404).json({ statusId: 3, status: "User not found" });
-
-    }
-
-    if (!isResumeAvailable) {
-      return res.send(404).json({ statusId: 3, status: "Resume not found" });
-    }
+    preSaveValidation(res, userId, resumeId);
 
     const savedAdditionalInfo = await Promise.all(additionalInfo.map(addInfo => saveAdditionalInfoService(resumeId, userId, addInfo.title, addInfo.info)));
 

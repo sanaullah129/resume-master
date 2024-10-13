@@ -1,6 +1,6 @@
 import { Response } from "express";
-import { getUserById } from "../services/userService";
-import { getResumeById } from "../services/resumeService";
+import { getUserById } from "../services/UserService";
+import { getResumeById } from "../services/ResumeService";
 
 export const preSaveValidation = async (res: Response, userId: string, resumeId: string) => {
     isUserAvaiable(res, userId);

@@ -3,8 +3,8 @@ import dotenv from "dotenv";
 import connectDb from "./db";
 import bodyParser from "body-parser";
 import cors from 'cors';
-import userRoutes from "./routes/userRoutes";
-import resumeRoutes from "./routes/resumeRoutes";
+import userRoutes from "./routes/UserRoutes";
+import resumeRoutes from "./routes/ResumeRoutes";
 
 dotenv.config();
 

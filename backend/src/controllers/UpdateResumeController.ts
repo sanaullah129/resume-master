@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { errorLogService } from "../services/commonService";
+import { errorLogService } from "../services/CommonService";
 import { preSaveValidation } from "../middlewares/utils";
-import { savePersonalInfoService, saveResumeDescription, saveSkill, saveTitleService } from "../services/resumeService";
+import { savePersonalInfoService, saveResumeDescription, saveSkill, saveTitleService } from "../services/ResumeService";
 
 // PUT
 // Route: "/api/updateResume/personalInfo/:id"
@@ -87,31 +87,54 @@ export const updateDescription = async (req: Request, res: Response) => {
     }
 }
 
-// PATCH
+// PUT
 // Route: "/api/resume/updateSkills/:id"
 export const updateSkills = async (req: Request, res: Response) => {
     try {
-  
-      const { userId, technicalSkills, otherSkills } = req.body;
-      const { resumeId } = req.params;
-  
-      if (!resumeId || !userId || !technicalSkills || !otherSkills) {
-        return res.status(400).json({ statusId: 2, status: "Please fill all the details" });
-      }
-  
-      preSaveValidation(res, userId, resumeId);  
-  
-      const addSkills = await saveSkill(resumeId, userId, technicalSkills, otherSkills);
-  
-      if (addSkills) {
-        return res.status(200).json({ resumeDetails: addSkills });
-      } else {
-        return res.status(500).json({ statusId: 0, status: "Some Error Occured while Saving" });
-      }
-  
+
+        const { userId, technicalSkills, otherSkills, skillId } = req.body;
+        const { resumeId } = req.params;
+
+        if (!resumeId || !userId || !technicalSkills || !otherSkills) {
+            return res.status(400).json({ statusId: 2, status: "Please fill all the details" });
+        }
+
+        preSaveValidation(res, userId, resumeId);
+
+        const addSkills = await saveSkill(resumeId, userId, technicalSkills, otherSkills);
+
+        if (addSkills) {
+            return res.status(200).json({ resumeDetails: addSkills });
+        } else {
+            return res.status(500).json({ statusId: 0, status: "Some Error Occured while Saving" });
+        }
+
     } catch (error: any) {
-      console.log(error);
-      errorLogService("Save Skill Route", error.toString());
-      return res.status(500).json({ statusId: 0, status: "Internal Server Error", error: error.toString() });
+        console.log(error);
+        errorLogService("Edit Skill Route", error.toString());
+        return res.status(500).json({ statusId: 0, status: "Internal Server Error", error: error.toString() });
     }
-  }
+}
+
+// PUT
+// Route: "/api/updateExperience/:id"
+export const updateExperience = async (req: Request, res: Response) => {
+    try {
+        const { userId, experiences } = req.body;
+
+        const { resumeId } = req.params;
+
+        if (!resumeId || !userId || !experiences || !Array.isArray(experiences)) {
+            return res.status(400).json({ statusId: 2, status: "Please fill all the details" });
+        }
+
+        preSaveValidation(res, userId, resumeId);
+
+        // const updateExperience = await 
+
+    } catch (error: any) {
+        console.log(error);
+        errorLogService("Edit Experience Route", error.toString());
+        return res.status(500).json({ statusId: 0, status: "Internat Server Error", error: error.toString() });
+    }
+}
